@@ -24,7 +24,7 @@ class Response {
     // only the most used one here so far...
 
     //1xx
-    const CONTINUE = '100 Continue';
+    const HTTP_CONTINUE = '100 Continue';   // Continue is a reserved word... This ain't nice.
     const SWITCHING_PROTOCOL = '101 Switching Protocols';
     const WEBDAV_PROCESSING = '102 Processing'; // (WebDAV) (RFC 2518)
     const CHECKPOINT = '103 Checkpoint';
