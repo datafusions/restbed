@@ -22,16 +22,30 @@ use restbed\config\Config;
 class Response {
 
     // only the most used one here so far...
-    // TODO : Add All HTTP Status Codes.
+
+    //1xx
+    const CONTINUE = '100 Continue';
+    const SWITCHING_PROTOCOL = '101 Switching Protocols';
+    const WEBDAV_PROCESSING = '102 Processing'; // (WebDAV) (RFC 2518)
+    const CHECKPOINT = '103 Checkpoint';
+    
     //2xx
     const OK = '200 OK';
     const CREATED = '201 Created';
+    const ACCEPTED = '202 Accepted';
+    const NON_AUTHORITATIVE_INFORMATION = '203 Non-Authoritative Information'; // (since HTTP/1.1)
     const NO_CONTENT = '204 No Content';
+    const RESET_CONTENT = '205 Reset Content';
+    const PARTIAL_CONTENT = '206 Partial Content';
+    const WEBDAV_MULTI_STATUS = '207 Multi-Status'; // (WebDAV) (RFC 4918)
 
     //3xx
+    const MOVED_PERMANENTLY = '301 Moved Permanently';
+    const MOVED_TEMPORARILY = '302 Moved Temporarily';
     const SEE_OTHER = '303 See Other';
     const NOT_MODIFIED = '304 Not Modified';
     const TEMPORARY_REDIRECT = '307 Temporary Redirect';
+    const RESUME_INCOMPLETE = '308 Resume Incomplete';
 
     //4xx
     const BAD_REQUEST = '400 Bad Request';
