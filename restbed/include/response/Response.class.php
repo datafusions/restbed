@@ -25,40 +25,40 @@ class Response {
 
     //1xx
     const HTTP_CONTINUE = '100 Continue';   // Continue is a reserved word... This ain't nice.
-    const SWITCHING_PROTOCOL = '101 Switching Protocols';
-    const WEBDAV_PROCESSING = '102 Processing'; // (WebDAV) (RFC 2518)
-    const CHECKPOINT = '103 Checkpoint';
+    const HTTP_SWITCHING_PROTOCOL = '101 Switching Protocols';
+    const HTTP_WEBDAV_PROCESSING = '102 Processing'; // (WebDAV) (RFC 2518)
+    const HTTP_CHECKPOINT = '103 Checkpoint';
     
     //2xx
-    const OK = '200 OK';
-    const CREATED = '201 Created';
-    const ACCEPTED = '202 Accepted';
-    const NON_AUTHORITATIVE_INFORMATION = '203 Non-Authoritative Information'; // (since HTTP/1.1)
-    const NO_CONTENT = '204 No Content';
-    const RESET_CONTENT = '205 Reset Content';
-    const PARTIAL_CONTENT = '206 Partial Content';
-    const WEBDAV_MULTI_STATUS = '207 Multi-Status'; // (WebDAV) (RFC 4918)
+    const HTTP_OK = '200 OK';
+    const HTTP_CREATED = '201 Created';
+    const HTTP_ACCEPTED = '202 Accepted';
+    const HTTP_NON_AUTHORITATIVE_INFORMATION = '203 Non-Authoritative Information'; // (since HTTP/1.1)
+    const HTTP_NO_CONTENT = '204 No Content';
+    const HTTP_RESET_CONTENT = '205 Reset Content';
+    const HTTP_PARTIAL_CONTENT = '206 Partial Content';
+    const HTTP_WEBDAV_MULTI_STATUS = '207 Multi-Status'; // (WebDAV) (RFC 4918)
 
     //3xx
-    const MOVED_PERMANENTLY = '301 Moved Permanently';
-    const MOVED_TEMPORARILY = '302 Moved Temporarily';
-    const SEE_OTHER = '303 See Other';
-    const NOT_MODIFIED = '304 Not Modified';
-    const TEMPORARY_REDIRECT = '307 Temporary Redirect';
-    const RESUME_INCOMPLETE = '308 Resume Incomplete';
+    const HTTP_MOVED_PERMANENTLY = '301 Moved Permanently';
+    const HTTP_MOVED_TEMPORARILY = '302 Moved Temporarily';
+    const HTTP_SEE_OTHER = '303 See Other';
+    const HTTP_NOT_MODIFIED = '304 Not Modified';
+    const HTTP_TEMPORARY_REDIRECT = '307 Temporary Redirect';
+    const HTTP_RESUME_INCOMPLETE = '308 Resume Incomplete';
 
     //4xx
-    const BAD_REQUEST = '400 Bad Request';
-    const UNAUTHORIZED = '401 Unauthorized';
-    const FORBIDDEN = '403 Forbidden';
-    const NOT_FOUND = '404 Not Found';
-    const METHOD_NOT_ALLOWED = '405 Method Not Allowed';
-    const CONFLICT = '409 Conflict';
+    const HTTP_BAD_REQUEST = '400 Bad Request';
+    const HTTP_UNAUTHORIZED = '401 Unauthorized';
+    const HTTP_FORBIDDEN = '403 Forbidden';
+    const HTTP_NOT_FOUND = '404 Not Found';
+    const HTTP_METHOD_NOT_ALLOWED = '405 Method Not Allowed';
+    const HTTP_CONFLICT = '409 Conflict';
 
     //5xx
-    const INTERNAL_SERVER_ERROR = '500 Internal Server Error';
-    const NOT_IMPLEMENTED = '501 Not Implemented';
-    const SERVICE_UNAVAILABLE = '503 Service Unavailable';
+    const HTTP_INTERNAL_SERVER_ERROR = '500 Internal Server Error';
+    const HTTP_NOT_IMPLEMENTED = '501 Not Implemented';
+    const HTTP_SERVICE_UNAVAILABLE = '503 Service Unavailable';
 
     private static $responseInstance; ///< The response singleton instance.
     /**

@@ -5,7 +5,10 @@
  * @author erwan
  * @date 05/05/2010
  */
-use restbed\include\Controller;
+use restbed\Controller;
+use restbed\response\Response;
+
+require_once('Sample.class.php');
 
 class SampleController extends Controller {
 
@@ -18,7 +21,6 @@ class SampleController extends Controller {
         $id
     ) {
         return Sample::loadByUid($id);
-        //return ResourceLoader::load('Sample', $id);
     }
 
     /**
@@ -38,12 +40,11 @@ class SampleController extends Controller {
      */
     public function put(
     ) {
-        $stuff = $this->requestInfo->getRequestData();
+        $data = $this->requestInfo->getRequestData();
 
-  //      $sample = ResourceLoader::create('Sample', $stuff);
-        // Set the response header accordingly.?
-        
-        return $sample;
+        $this->response->setResponseCode(Response::HTTP_NOT_IMPLEMENTED);
+
+        return false;
     }
 
     /**
@@ -51,15 +52,10 @@ class SampleController extends Controller {
      */
     public function post(
     ) {
-        $stuff = $this->requestInfo->getRequestData();
-    //    $sample = ResourceLoader::load('Sample', $stuff);
-        if ($sample == null) { // null means nothing found.
-            return null;
-        }
-        
-      //  ResourceLoader::update($sample, $stuff);
+        $data = $this->requestInfo->getRequestData();
 
-        return $sample;
+        $this->response->setResponseCode(Response::HTTP_NOT_IMPLEMENTED);
+        return false;
     }
 }
 ?>

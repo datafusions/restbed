@@ -18,7 +18,7 @@ class Config {
     const BASE_PATH = '';
 
     // User config
-    const USES_AUTH = true;
+    const USES_AUTH = false;
     const AUTH_TABLE = 'users';
     const AUTH_FIELD_UID = 'uid';
     const AUTH_FIELD_LOGIN = 'email';

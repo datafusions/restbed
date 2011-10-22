@@ -12,8 +12,8 @@ if (Config::USES_AUTH) {
     $_USER = restbed\user\User::getLoggedInUser();
 
     if ($_USER == null) {
-        $_RESPONSE->setResponseCode(Response::UNAUTHORIZED);
-        $_RESPONSE->addMessage(Response::UNAUTHORIZED, 'Unauthorized');
+        $_RESPONSE->setResponseCode(Response::HTTP_UNAUTHORIZED);
+        $_RESPONSE->addMessage(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
         $_RESPONSE->send();
         exit();
     }
@@ -25,8 +25,8 @@ $controller = $_RESOURCE[$resource]['controller'];
 
 if (!isset($controller)) {
 
-    $_RESPONSE->setResponseCode(Response::NOT_FOUND);
-    $_RESPONSE->addMessage(Response::NOT_FOUND, 'Not Found');
+    $_RESPONSE->setResponseCode(Response::HTTP_NOT_FOUND);
+    $_RESPONSE->addMessage(Response::HTTP_NOT_FOUND, 'Not Found');
 
 } else {
 
@@ -80,33 +80,25 @@ if (!isset($controller)) {
                             $response = $method->invokeArgs($control, $args);
 
                             if ($response instanceof ResourceBase) {
-//error_log('RESOURCEBASE');      
                                 // TODO : Conditional Get.
                                 // $response-getLastModified()
                                 $_RESPONSE->addHeader('Last-Modified', $response->getLastModified());
                                 $_RESPONSE->addBlock($response);
                             } else if ($response instanceof ResponseBlock) {
-//error_log('RESPONSEBLOCK');
                                 $_RESPONSE->addBlock($response);
                             } else if ($response === true) {
-//error_log('TRUE');
                                 // ....
                             } else if ($response != '') {
-//error_log("MESSAGE");
                                 $_RESPONSE->addMessage("Response", $response);
                             } else if ($response === null) {
-//error_log('NULL');
                                 // Return null, when the uri pattern matches but nothing was found.
                                 $match = false;
                             } else if ($response === false) {
-//error_log('FALSE');
                                 // Return false, when user not allowed to perform method.
                                 $match = true;
                                 // Permission Denied scenario.
-                            } else {
-//error_log('ELSE');
-                            }
-                            
+                            }                             
+
                             break;
                         }
                     }
@@ -115,8 +107,8 @@ if (!isset($controller)) {
     }
 
     if (!$match) {
-        $_RESPONSE->setResponseCode(Response::NOT_FOUND);
-        $_RESPONSE->addMessage(Response::NOT_FOUND, 'Not Found');
+        $_RESPONSE->setResponseCode(Response::HTTP_NOT_FOUND);
+        $_RESPONSE->addMessage(Response::HTTP_NOT_FOUND, 'Not Found');
     }
 }
 

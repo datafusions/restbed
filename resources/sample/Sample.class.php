@@ -10,8 +10,8 @@
  * @RB_MultiValueBlock
  */
 
-use restbed\include\resource\ResourceBase;
-use restbed\include\db\Db;
+use restbed\resource\ResourceBase;
+use restbed\db\Db;
 
 class Sample extends ResourceBase {
     
@@ -31,7 +31,22 @@ class Sample extends ResourceBase {
     public static function loadByUid(
         $uid
     ) {
-        
+        $db = Db::getInstance();
+        $sql = "SELECT * FROM `sample` WHERE `uid` = $uid";
+
+        $res = $db->query($sql);
+
+        if ($db->numRows($res) == 0) {
+            $db->freeResult($res);
+            return null;
+        }
+
+        $row = $db->fetchAssoc($res);
+        $sample = New Sample($row);
+
+        $db->freeResult($res);
+
+        return $sample;
     }
 
     private $name;

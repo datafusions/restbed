@@ -28,13 +28,9 @@ class NodeParser {
             $className = strtolower(get_class($object));
         }
 
-//var_dump($reflection);
-
         if ($reflection->hasAnnotation('RB_SingleValueBlock')) {
-            error_log('SINGLE');
             $data = $this->parseSingleValueBlock($object, $reflection, $className);
         } else if ($reflection->hasAnnotation('RB_MultiValueBlock')) {
-            error_log('MULTI');
             $data = $this->parseMultiValueBlock($object, $reflection, $className);
         }
 
