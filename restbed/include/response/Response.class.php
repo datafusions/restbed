@@ -53,13 +53,19 @@ class Response {
     const HTTP_FORBIDDEN = '403 Forbidden';
     const HTTP_NOT_FOUND = '404 Not Found';
     const HTTP_METHOD_NOT_ALLOWED = '405 Method Not Allowed';
+    const HTTP_NOT_ACCEPTABLE = '406 Not Acceptable';
+    const HTTP_REQUEST_TIMEOUT = '408 Request Timeout';
     const HTTP_CONFLICT = '409 Conflict';
+    const HTTP_LENGTH_REQUIRED = '411 Length Required';
+    const HTTP_I_M_A_TEAPOT = '418 I\'m a teapot'; // (RFC 2324)
 
     //5xx
     const HTTP_INTERNAL_SERVER_ERROR = '500 Internal Server Error';
     const HTTP_NOT_IMPLEMENTED = '501 Not Implemented';
     const HTTP_SERVICE_UNAVAILABLE = '503 Service Unavailable';
-
+    const HTTP_GATEWAY_TIMEOUT = '504 Gateway Timeout';
+    const HTTP_VERSION_NOT_SUPPORTED = '505 HTTP Version Not Supported';
+    
     private static $responseInstance; ///< The response singleton instance.
     /**
      * Get the instance of this class. There can only be one Response per session.
