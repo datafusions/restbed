@@ -14,6 +14,13 @@ class TestModel extends restbed\resource\ResourceBase {
      * @RB_BlockProperty("publicMember") 
      */
     public $publicMember = "publicMember";
+    
+    /**
+     * Don't include null values.
+     *
+     * @RB_BlockProperty("nothingHere")
+     */
+    public $nothingHere = null;
 
     private $text;
 

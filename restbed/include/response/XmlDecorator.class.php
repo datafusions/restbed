@@ -41,7 +41,7 @@ class XmlDecorator {
      */
     private function decorateDataNodes(
         DataNode $data
-    ) {      
+    ) {
         $xmlRoot = $this->xmlDoc->createElement($this->xmlEntities($data->getName()));
 
         if ($data->getType() == DataNode::TYPE_SINGLE_VALUE) {

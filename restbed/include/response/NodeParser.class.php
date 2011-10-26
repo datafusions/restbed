@@ -103,8 +103,21 @@ class NodeParser {
         
         $root = DataNode::makeNode($className);
 
+        // Go through class members first.
         foreach($properties as $property) {
             $workingNode = $root;
+
+            // getAllAnnotations returns an empty array if no annotations.
+            if (sizeof($property->getAllAnnotations()) == 0) {
+                continue;
+            }
+
+            $returnedValue = $property->getValue($object);
+
+            // Don't include the value if it is null.
+            if ($returnedValue == null) {
+                continue;
+            }
 
             if ($property->hasAnnotation('RB_BlockParent')) {
                 $parentBlock = $property->getAnnotation('RB_BlockParent')->value;
@@ -123,15 +136,13 @@ class NodeParser {
             if ($property->hasAnnotation('RB_BlockProperty')) {
                 $annotation = $property->getAnnotation('RB_BlockProperty');
 
-                $objData = $property->getValue($object);
-
-                if (is_object($objData) && $objData instanceof ResponseBlock) {
-                    $node = $this->parseBlock($objData);
+                if (is_object($returnedValue) && $returnedValue instanceof ResponseBlock) {
+                    $node = $this->parseBlock($returnedValue);
                     $workingNode->addData($node);
-                } else if (is_array($objData)) {
+                } else if (is_array($returnedValue)) {
                     $nonWereObjects = true;
 
-                    foreach($objData as $objDatum) {
+                    foreach($returnedValue as $objDatum) {
                         if (is_object($objDatum)) {
                             $nonWereObjects = false;
                             if ($objDatum instanceof ResponseBlock) {
@@ -142,14 +153,14 @@ class NodeParser {
                     }
 
                     if ($nonWereObjects) {
-                        $node = DataNode::makeSingleValueNode($annotation->value, $property->getValue($object));
+                        $node = DataNode::makeSingleValueNode($annotation->value, $returnedValue);
                         if ($property->hasAnnotation('RB_BlockArrayKey')) {
                             $node->setDataKey($property->getAnnotation('RB_BlockArrayKey')->value);
                         }
                         $workingNode->addData($node);
                     }
                 } else {
-                    $workingNode->addData(DataNode::makeNode($annotation->value, $property->getValue($object)));
+                    $workingNode->addData(DataNode::makeSingleValueNode($annotation->value, $returnedValue));
                 }
             }
 
@@ -157,19 +168,32 @@ class NodeParser {
                 $annotation = $property->getAnnotation('RB_BlockAttribute');
 
                 if ($annotation->property == 'root') {
-                    $root->addAttribute($annotation->attribute, $property->getValue());
+                    $root->addAttribute($annotation->attribute, $returnedValue);
                 } else {
                     $node = $workingNode->getData($annotation->property);
-                    $node->addAttribute($annotation->attribute, $property->getValue());
+                    $node->addAttribute($annotation->attribute, $returnedValue);
                 }
             }
         }
 
-        // get all properties and attributes
+        // Do the same thing as properties (Members), but with Methods.
+        // NOTE : I wonder if there is a clean way to abstract both into one...
         foreach($methods as $method) {
             $methodName = $method->getName();
 
             $workingNode = $root;
+            
+            // getAllAnnotations returns an empty array if no annotations.
+            if (sizeof($method->getAllAnnotations()) == 0) {
+                continue;
+            }
+
+            $returnedValue = $object->$methodName();
+
+            // Don't include the value if it is null.
+            if ($returnedValue == null) {
+                continue;
+            }
 
             if ($method->hasAnnotation('RB_BlockParent')) {
                 $parentBlock = $method->getAnnotation('RB_BlockParent')->value;
@@ -188,17 +212,15 @@ class NodeParser {
            if ($method->hasAnnotation('RB_BlockProperty')) {
                 $annotation = $method->getAnnotation('RB_BlockProperty');
 
-                $objData = $object->$methodName();
-
-                if (is_object($objData)) {
-                    if ($objData instanceof ResponseBlock) {
-                        $node = $this->parseBlock($objData);
+                if (is_object($returnedValue)) {
+                    if ($returnedValue instanceof ResponseBlock) {
+                        $node = $this->parseBlock($returnedValue);
                         $workingNode->addData($node);
                     }
-                } else if (is_array($objData)) {
+                } else if (is_array($returnedValue)) {
                     $nonWereObjects = true;
 
-                    foreach($objData as $objDatum) {
+                    foreach($returnedValue as $objDatum) {
                         if (is_object($objDatum)) {
                             $nonWereObjects = false;
                             if ($objDatum instanceof ResponseBlock) {
@@ -209,14 +231,14 @@ class NodeParser {
                     }
 
                     if ($nonWereObjects) {
-                        $node = DataNode::makeNode($annotation->value, $object->$methodName());
+                        $node = DataNode::makeNode($annotation->value, $returnedValue);
                         if ($method->hasAnnotation('RB_BlockArrayKey')) {
                             $node->setDataKey($method->getAnnotation('RB_BlockArrayKey')->value);
                         }
                         $workingNode->addData($node);
                     }
                 } else {
-                    $workingNode->addData(DataNode::makeSingleValueNode($annotation->value, $object->$methodName()));
+                    $workingNode->addData(DataNode::makeSingleValueNode($annotation->value, $returnedValue));
                 }
             }
 
@@ -224,10 +246,10 @@ class NodeParser {
                 $annotation = $method->getAnnotation('RB_BlockAttribute');
 
                 if ($annotation->property == 'root') {
-                    $root->addAttribute($annotation->attribute, $object->$methodName());
+                    $root->addAttribute($annotation->attribute, $returnedValue);
                 } else {
                     $node = $workingNode->getDataNode($annotation->property);
-                    $node->addAttribute($annotation->attribute, $object->$methodName());
+                    $node->addAttribute($annotation->attribute, $returnedValue);
                 }
             }
         }

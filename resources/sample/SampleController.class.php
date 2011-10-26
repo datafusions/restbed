@@ -9,6 +9,7 @@ use restbed\Controller;
 use restbed\response\Response;
 
 require_once('Sample.class.php');
+require_once('TestModel.class.php');
 
 class SampleController extends Controller {
 
@@ -56,6 +57,16 @@ class SampleController extends Controller {
 
         $this->response->setResponseCode(Response::HTTP_NOT_IMPLEMENTED);
         return false;
+    }
+
+    /**
+     * @RB_Control(rmethod="GET", pattern="example/$uid/with/$text")
+     */
+    public function example(
+        $uid,
+        $text
+    ) {
+        return new TestModel($uid, $text);
     }
 }
 ?>

@@ -1,10 +1,5 @@
 Order Deny,Allow
 Allow from all
 
-#AuthName LunchRoll
-#AuthType basic
-#AuthUserFile /var/www/lunchroll-service/.htpasswd
-#require valid-user
-
 RewriteEngine on
 RewriteRule ^(.+)/?$ index.php [L]
