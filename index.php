@@ -1,5 +1,5 @@
 <?
-header("Content-Type:text/xml");
+header("Content-Type:text/xml"); // This should depend on which Decorator is used.
 require_once('restbed/restbed.inc.php');
 
 use restbed\response\Response;
@@ -20,10 +20,13 @@ if (Config::USES_AUTH) {
 
 }
 
+/*
+A convention (limitation?) of restbed is that the first part is the resource name that is linked to the controller in resources.conf.php .
+*/
 $resource = $_REQUEST_INFO->getResourceName();
-$controller = $_RESOURCE[$resource]['controller'];
+$controller = (isset($_RESOURCE[$resource]['controller']) ? $_RESOURCE[$resource]['controller'] : null);
 
-if (!isset($controller)) {
+if ($controller == null) {
 
     $_RESPONSE->setResponseCode(Response::HTTP_NOT_FOUND);
     $_RESPONSE->addMessage(Response::HTTP_NOT_FOUND, 'Not Found');
@@ -38,8 +41,17 @@ if (!isset($controller)) {
     $methods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
 
     $match = false;
+    $response = false;
 
-    foreach($methods as $method) {
+    // TODO : Add a caching mechanism so we don't iterate through a Controller's methods every time.
+    // First check in the cache.
+    if ($_CACHE != null) {
+        $match = $_CACHE->invoke($_REQUEST_INFO, $control, $response);
+    }
+
+    if (!$match) {
+
+        foreach($methods as $method) {
             $methodName = $method->getName();
 
             //error_log("METHOD : $methodName");
@@ -76,13 +88,21 @@ if (!isset($controller)) {
                         if ($match) {
                             //error_log("MATCH ON $methodName :: ARGS".implode(',',$args).')');
                             
+                            // Store the match in the cache object.
+                            if ($_CACHE != null) {
+                                $_CACHE->store($_REQUEST_INFO, $method);
+                            }
+                            
                             // call the function and add the returned block to the RESPONSE.
                             $response = $method->invokeArgs($control, $args);
 
                             if ($response instanceof ResourceBase) {
                                 // TODO : Conditional Get.
-                                // $response-getLastModified()
-                                $_RESPONSE->addHeader('Last-Modified', $response->getLastModified());
+
+                                if ($response-getLastModified() != null) {
+                                    $_RESPONSE->addHeader('Last-Modified', $response->getLastModified());
+                                }
+
                                 $_RESPONSE->addBlock($response);
                             } else if ($response instanceof ResponseBlock) {
                                 $_RESPONSE->addBlock($response);
@@ -104,8 +124,10 @@ if (!isset($controller)) {
                     }
                 }
             }
+        }
     }
-
+    
+    // If we still can't match, return a 404.
     if (!$match) {
         $_RESPONSE->setResponseCode(Response::HTTP_NOT_FOUND);
         $_RESPONSE->addMessage(Response::HTTP_NOT_FOUND, 'Not Found');

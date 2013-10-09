@@ -36,6 +36,11 @@ class RequestInfo implements \ArrayAccess, \Countable, response\ResponseBlock {
     private $pathString = '';    ///< Hold the raw path info string (without leading '/')
     private $queryString = '';
 
+    /* Handler Info */
+    private $controller;        ///< The controller class used for this request.
+    private $method;            ///< The method used.
+    private $argList;           ///< Array describing the arguments list.
+
     /**
      * Private constructor, takes the $_SERVER['REQUEST_URI'] string and parses it.
      *
@@ -114,6 +119,26 @@ class RequestInfo implements \ArrayAccess, \Countable, response\ResponseBlock {
         return $this[0];
     }
 
+    /** @RB_BlockProperty("raw") */
+    public function getRawUri() {
+        return $_SERVER[REQUEST_URI];
+    }
+    
+    /** @RB_BlockProperty("path_string") */
+    public function getPathString() {
+        return $this->pathString;
+    }
+    
+    /** @RB_BlockProperty("query_string") */
+    public function getQueryString() {
+        return $this->queryString;
+    }
+
+    /** @RB_BlockProperty("path_info") */
+    public function getPathData() {
+        return $this->pathData;
+    }
+    
     /*
      * Implement the ArrayAcess Interface
      */
@@ -164,25 +189,5 @@ class RequestInfo implements \ArrayAccess, \Countable, response\ResponseBlock {
         return count($this->pathData);
     }
 
-    /** @RB_BlockProperty("raw") */
-    public function getRawUri() {
-        return $_SERVER[REQUEST_URI];
-    }
-    
-    /** @RB_BlockProperty("path_string") */
-    public function getPathString() {
-        return $this->pathString;
-    }
-    
-    /** @RB_BlockProperty("query_string") */
-    public function getQueryString() {
-        return $this->queryString;
-    }
-
-    /** @RB_BlockProperty("path_info") */
-    public function getPathData() {
-        return $this->pathData;
-    }
-    
 } // end class RequestInfo
 ?>

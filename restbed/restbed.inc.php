@@ -26,13 +26,14 @@ $_USER = null;
 if (Config::USES_AUTH) {
     require_once('include/user/User.class.php');
     require_once('include/user/UserController.class.php');
-//    require_once('user/UserPref.class.php'); //?
     $_RESOURCE['user']['controller'] = 'UserController';
 }
 
-
 $_REQUEST_INFO = restbed\RequestInfo::getInstance();
 $_RESPONSE = restbed\response\Response::getInstance();
+
+// Load the caching mechanism...
+$_CACHE = null;
 
 require_once('config/resources.conf.php');
 ?>
