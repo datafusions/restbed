@@ -12,17 +12,17 @@ class Config {
     //User editable configs
 
     // Location of the service.
-    const PROTO = 'http';
+    const PROTOCOL = 'http';
     const HOST = 'restbed.shacknet.nu';
     const PORT = '';
     const BASE_PATH = '';
 
     // User config
-    const USES_AUTH = false;
-    const AUTH_TABLE = 'users';
-    const AUTH_FIELD_UID = 'uid';
-    const AUTH_FIELD_LOGIN = 'email';
-    const AUTH_FIELD_PASSWORD = 'password';
+    const USES_AUTH = false; 			///< Use Authentication
+    const AUTH_TABLE = 'users';			///< The database table containing user authentication
+    const AUTH_FIELD_UID = 'uid';		///< The UID field for the user.
+    const AUTH_FIELD_LOGIN = 'email';		///< The username field.
+    const AUTH_FIELD_PASSWORD = 'password';	///< The password field.
 
     // Db Config
     const DB_HOST = 'localhost';    ///< Host of the mysql database
@@ -70,7 +70,7 @@ class Config {
      * @return <type> The service's base URI
      */
     public static function getUriBase() {
-        return Config::PROTO.'://'.Config::HOST.(Config::PORT == '' ? '' : ':'.Config::PORT).'/'.(Config::BASE_PATH == '' ? '' : Config::BASE_PATH.'/');
+        return Config::PROTOCOL.'://'.Config::HOST.(Config::PORT == '' ? '' : ':'.Config::PORT).'/'.(Config::BASE_PATH == '' ? '' : Config::BASE_PATH.'/');
     }
    
 }

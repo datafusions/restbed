@@ -10,16 +10,11 @@ require_once('config/Config.class.php');
 use restbed\config\Config;
 
 require_once('include/Annotations.inc.php');
-
 require_once('include/response/Response.class.php');
-
 require_once('include/RequestInfo.class.php');
 require_once('include/Controller.class.php');
-
 require_once('include/db/Db.class.php');
-
 require_once('include/resource/ResourceBase.abstract.php');
-
 
 // User Resource
 $_USER = null;
